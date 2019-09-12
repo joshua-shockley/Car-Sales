@@ -10,5 +10,4 @@ const AdditionalFeature = props => {
     </li>
   );
 };
-
 export default AdditionalFeature;

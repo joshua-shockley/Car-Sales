@@ -1,6 +1,5 @@
 import { BUY_ITEM } from '../actions/index.js';
 import { REMOVE_FEATURE } from '../actions/index.js';
-import { TOTAL_PRICE } from '../actions/index.js';
 const initialState = {
     additionalPrice: 0,
     car: {
@@ -39,9 +38,10 @@ export const reducer = (state = initialState, action) => {
                 car: {
                     ...state.car,
                     features: [...state.car.features, action.payload]
-                }
-
-
+                },
+                additionalPrice: action.payload.price + state.additionalPrice,
+                ...state.store,
+                store: state.store.filter(item => item.id !== action.payload.id)
             };
         case REMOVE_FEATURE:
             console.log('testing testing dudely');
@@ -50,20 +50,11 @@ export const reducer = (state = initialState, action) => {
                 car: {
                     ...state.car,
                     features: state.car.features.filter(item => item.id !== action.payload.id)
-                }
+                },
+                additionalPrice: state.additionalPrice - action.payload.price,
+                ...state.store,
+                store: [...state.store, action.payload]
             };
-        case TOTAL_PRICE:
-            const totalP = state.car.features.reduce(function(acc, currentPrice) {
-                return acc + currentPrice.price;
-            }, 0);
-            console.log(totalP);
-            return {
-                ...state,
-                car: {
-                    ...state.car,
-                    price: state.car.price + totalP
-                }
-            }
         default:
             return state;
     }
